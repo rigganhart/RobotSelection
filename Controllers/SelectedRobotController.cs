@@ -34,8 +34,20 @@ public class SelectRobotController: ControllerBase
     }
 
     selectedRobots.Sort((x,y) => x.distanceToGoal.CompareTo(y.distanceToGoal));
-
     SelectedRobot closestRobot = selectedRobots[0];
+
+    List<SelectedRobot> lessThanTen = selectedRobots.FindAll(r => r.distanceToGoal < 10); 
+
+    if(lessThanTen.Count > 1)
+    {
+      Console.WriteLine($"Multiple Less Than Ten:\n {lessThanTen[1].distanceToGoal} ");
+      lessThanTen.Sort((x, y) => y.batteryLevel.CompareTo(x.batteryLevel));
+      Console.WriteLine($"Multiple Less Than Ten:\n {lessThanTen[1].distanceToGoal} ");
+
+      closestRobot = lessThanTen[0];
+    }
+
+    
     return CreatedAtAction(nameof(Create), new { id = closestRobot.robotId}, closestRobot );
   }
 }
